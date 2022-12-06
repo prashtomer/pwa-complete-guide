@@ -29,3 +29,6 @@ Docs:
   - Service worker only work with pages on https, localhost is the exception.
   - You don't have access to DOM events in service worker but other special events like fetch, install, activate etc
   - If you make any change in the service worker file than make sure you close all the tabs running the application and open new one else you won't see the service wotker to be activated and running.
+  - Service worker is only installed if it is changed but register will get called on very page refresh
+  - caching the service worker dosn't make sense because you can get stuck in an infinite loop because we would constantly fetch an old version of the service worker
+  - cache storage in browser under applications should be used to cache files and json data even though you can cache data also.
