@@ -1,5 +1,5 @@
 // Bump these versions if you make changes in any of the files that you are caching
-var CACHE_STATIC_NAME = 'static-v11';
+var CACHE_STATIC_NAME = 'static-v14';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 
 self.addEventListener('install', function (event) {
@@ -47,6 +47,7 @@ self.addEventListener('activate', function (event) {
   return self.clients.claim(); // it ensures that the service workers are loaded correctly, can also work without this line but may behave strangely
 });
 
+
 // self.addEventListener('fetch', function (event) {
 //   // event.respondWith(fetch(event.request)); // let the request go as is.
 //   event.respondWith(
@@ -75,6 +76,51 @@ self.addEventListener('activate', function (event) {
 //       })
 //   );
 // });
+
+
+// Cache then Network Strategy for url and else go back to old strategy ie cache with network fallback
+self.addEventListener('fetch', function (event) {
+  var url = 'https://httpbin.org/get';
+
+  if (event.request.url.indexOf(url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_DYNAMIC_NAME)
+        .then(function (cache) {
+          return fetch(event.request)
+            .then(function (res) {
+              cache.put(event.request, res.clone());
+              return res;
+            })
+        })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request)
+        .then(function (response) {
+          if (response) {
+            return response;
+          } else {
+            return fetch(event.request)
+              .then(function (res) {
+                return caches.open(CACHE_DYNAMIC_NAME) // caching dynamic data
+                  .then(function (cache) {
+                    // put doesn't make request like add. It just stores the data you have.
+                    cache.put(event.request.url, res.clone());
+                    return res;
+                  })
+              })
+              .catch(function (err) {
+                return caches.open(CACHE_STATIC_NAME)
+                  .then(function (cache) {
+                    // fallback page for when cache doesn't exist for a requested page when visiting without internet.
+                    return cache.match('/offline.html');
+                  });
+              })
+          }
+        })
+    );
+  }
+});
 
 // Network with cache fallback strategy along with dynamic caching
 // This will give bad user experience if the connection timeout because the cache look will happen after that
