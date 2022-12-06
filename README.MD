@@ -12,6 +12,7 @@ Finally, run `npm start` to start the development server and visit [localhost:80
 Docs: 
 
 - Manifest file helps install the app on the home pafe of the device via web browser so that the app can be open by a icon just like we open native mobile apps via icon.
+
 - Service workers
   - Scripts that runs in tha background n different thread and can react to certail events like fetch
   - Can keep running event after the application or browser is closed
@@ -32,3 +33,13 @@ Docs:
   - Service worker is only installed if it is changed but register will get called on very page refresh
   - caching the service worker dosn't make sense because you can get stuck in an infinite loop because we would constantly fetch an old version of the service worker
   - cache storage in browser under applications should be used to cache files and json data even though you can cache data also.
+
+- Indexed DB
+  - In browser database used to cache the data most probably in json format and not preferred for files but you can save files also.
+  - Used for caching dynamic content
+  - It's a key value database
+  - It runs in browser and not on server
+  - It is transactional in nature which means if one action within a transaction fails none of the actions of that transaction are applied
+  - can be accessed asynchronously with both from javascript and service workers
+  - Since in local storage and session storage data can be accessed synchronously they can not be used in service workers
+  - data can be unstructured and doesn't have to have schema.

@@ -107,7 +107,7 @@ function isInArray(string, array) {
 
 // Cache then Network Strategy for url and else go back to old strategy ie cache with network fallback
 self.addEventListener('fetch', function (event) { // cache then network
-  var url = 'https://httpbin.org/get';
+  var url = 'https://tomer-pwagram-default-rtdb.firebaseio.com/posts';
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
       caches.open(CACHE_DYNAMIC_NAME)
