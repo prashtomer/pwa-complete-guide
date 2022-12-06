@@ -128,7 +128,7 @@ self.addEventListener('fetch', function (event) { // cache then network
                 return caches.open(CACHE_STATIC_NAME)
                   .then(function (cache) {
                     // fallback page for when cache doesn't exist for a requested page when visiting without internet.
-                    if(event.request.url.indexOf('/help')) {
+                    if(event.request.headers.get('accept').includes('text/html')) {
                       return cache.match('/offline.html');
                     }
                   });
