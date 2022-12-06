@@ -76,6 +76,36 @@ self.addEventListener('activate', function (event) {
 //   );
 // });
 
+// Network with cache fallback strategy along with dynamic caching
+// This will give bad user experience if the connection timeout because the cache look will happen after that
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     fetch(event.request)
+//       .then(function (res) {
+//         return caches.open(CACHE_DYNAMIC_NAME) // caching dynamic data
+//           .then(function (cache) {
+//             // put doesn't make request like add. It just stores the data you have.
+//             cache.put(event.request.url, res.clone());
+//             return res;
+//           })
+//       })
+//       .catch(function (err) {
+//         return caches.match(event.request)
+//       })
+//   );
+// });
+
+// Network with cache fallback strategy
+// This will give bad user experience if the connection timeout because the cache look will happen after that
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     fetch(event.request)
+//       .catch(function (err) {
+//         return caches.match(event.request)
+//       })
+//   );
+// });
+
 // Cache only strategy (Not recommended). Can work if request is parsed for some resources
 // self.addEventListener('fetch', function (event) {
 //   event.respondWith(
