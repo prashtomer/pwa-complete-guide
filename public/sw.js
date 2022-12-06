@@ -18,6 +18,21 @@ var STATIC_FILES = [
   'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
 ]
 
+function trimCache(cacheName, maxItems) {
+  caches.open(cacheName)
+    .then(function (cache) {
+      return cache.keys()
+        .then(function (keys) {
+          if (keys.length > maxItems) {
+            cache.delete(keys[0])
+              .then(function () {
+                trimCache(cacheName, maxItems)
+              });
+          }
+        });
+    })
+}
+
 self.addEventListener('install', function (event) {
   console.log('[Service Worker] Installing Service Worker ...', event);
   event.waitUntil(
@@ -99,12 +114,13 @@ self.addEventListener('fetch', function (event) { // cache then network
         .then(function (cache) {
           return fetch(event.request)
             .then(function (res) {
+              trimCache(CACHE_DYNAMIC_NAME, 3);
               cache.put(event.request, res.clone());
               return res;
             })
         })
     );
-  } else if(isInArray(event.request.url, STATIC_FILES)) { // cache only
+  } else if (isInArray(event.request.url, STATIC_FILES)) { // cache only
     event.respondWith(
       caches.match(event.request)
     );
@@ -120,6 +136,7 @@ self.addEventListener('fetch', function (event) { // cache then network
                 return caches.open(CACHE_DYNAMIC_NAME) // caching dynamic data
                   .then(function (cache) {
                     // put doesn't make request like add. It just stores the data you have.
+                    trimCache(CACHE_DYNAMIC_NAME, 3);
                     cache.put(event.request.url, res.clone());
                     return res;
                   })
@@ -128,7 +145,7 @@ self.addEventListener('fetch', function (event) { // cache then network
                 return caches.open(CACHE_STATIC_NAME)
                   .then(function (cache) {
                     // fallback page for when cache doesn't exist for a requested page when visiting without internet.
-                    if(event.request.headers.get('accept').includes('text/html')) {
+                    if (event.request.headers.get('accept').includes('text/html')) {
                       return cache.match('/offline.html');
                     }
                   });
