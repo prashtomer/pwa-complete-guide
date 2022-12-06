@@ -25,3 +25,7 @@ Docs:
   - Service worker is not attached to a single page but to an overall domain or scope.
   - Scope means you can control which parts of the application are controlled by the service worker.
   - If the service worker file is unchanged it will not install it but if there is a change then service worker will be upgraded to the new version
+  - Placing the service worker file in code base will decide it's scope so it's preferable to store it in the root of public folder so that all the pages can have access ito it or else will only be available to pages inside the folder it is kept in.
+  - Service worker only work with pages on https, localhost is the exception.
+  - You don't have access to DOM events in service worker but other special events like fetch, install, activate etc
+  - If you make any change in the service worker file than make sure you close all the tabs running the application and open new one else you won't see the service wotker to be activated and running.
