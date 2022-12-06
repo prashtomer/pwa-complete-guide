@@ -47,31 +47,43 @@ self.addEventListener('activate', function (event) {
   return self.clients.claim(); // it ensures that the service workers are loaded correctly, can also work without this line but may behave strangely
 });
 
-self.addEventListener('fetch', function (event) {
-  // event.respondWith(fetch(event.request)); // let the request go as is.
-  event.respondWith(
-    caches.match(event.request)
-      .then(function (response) {
-        if (response) {
-          return response;
-        } else {
-          return fetch(event.request)
-            .then(function (res) {
-              return caches.open(CACHE_DYNAMIC_NAME) // caching dynamic data
-                .then(function (cache) {
-                  // put doesn't make request like add. It just stores the data you have.
-                  cache.put(event.request.url, res.clone());
-                  return res;
-                })
-            })
-            .catch(function (err) {
-              return caches.open(CACHE_STATIC_NAME)
-                .then(function (cache) {
-                  // fallback page for when cache doesn't exist for a requested page when visiting without internet.
-                  return cache.match('/offline.html');
-                });
-            })
-        }
-      })
-  );
-});
+// self.addEventListener('fetch', function (event) {
+//   // event.respondWith(fetch(event.request)); // let the request go as is.
+//   event.respondWith(
+//     caches.match(event.request)
+//       .then(function (response) {
+//         if (response) {
+//           return response;
+//         } else {
+//           return fetch(event.request)
+//             .then(function (res) {
+//               return caches.open(CACHE_DYNAMIC_NAME) // caching dynamic data
+//                 .then(function (cache) {
+//                   // put doesn't make request like add. It just stores the data you have.
+//                   cache.put(event.request.url, res.clone());
+//                   return res;
+//                 })
+//             })
+//             .catch(function (err) {
+//               return caches.open(CACHE_STATIC_NAME)
+//                 .then(function (cache) {
+//                   // fallback page for when cache doesn't exist for a requested page when visiting without internet.
+//                   return cache.match('/offline.html');
+//                 });
+//             })
+//         }
+//       })
+//   );
+// });
+
+// Cache only strategy (Not recommended). Can work if request is parsed for some resources
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(
+//     caches.match(event.request)
+//   );
+// })
+
+// Network only strategy (Not recommended even service worker is not required if every request is any ways going on network). Can work if request is parsed for some resources
+// self.addEventListener('fetch', function (event) {
+//   event.respondWith(fetch(event.request));
+// })
