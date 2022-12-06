@@ -2,7 +2,7 @@ importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
 // Bump these versions if you make changes in any of the static files that you are caching below in install event
-var CACHE_STATIC_NAME = 'static-v16';
+var CACHE_STATIC_NAME = 'static-v17';
 var CACHE_DYNAMIC_NAME = 'dynamic-v2';
 var STATIC_FILES = [
   '/',
