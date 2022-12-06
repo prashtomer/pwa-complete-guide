@@ -11,6 +11,26 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css">
   <link rel="stylesheet" href="/src/css/help.css">
+  <link rel="manifest" href="/manifest.json">
+  <!--  Add following meta tags since ios safari browser doesn't support manifest file yet so this will provide some basic pwa support but not like chrome which supports PWA completely-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="PWAGram">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-57x57.png" sizes="57x57">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-60x60.png" sizes="60x60">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-72x72.png" sizes="72x72">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-76x76.png" sizes="76x76">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-114x114.png" sizes="114x114">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-120x120.png" sizes="120x120">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-144x144.png" sizes="144x144">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-152x152.png" sizes="152x152">
+  <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-180x180.png" sizes="180x180">
+  <!--  Add following meta tags since internet explorer doesn't support manifest file so this will provide some basic pwa support but not like chrome which supports PWA completely-->
+  <!--  In edge support will come soon-->
+  <meta name="msapplication-TileImage" content="/src/images/icons/app-icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#fff">
+  <!--  Chrome will read this from manifest file so this is for the rest of the browsers as well as fallback for chrome in case manifest has some issue-->
+  <meta name="theme-color" content="#3f51b5">
 </head>
 <body>
 

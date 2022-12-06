@@ -7,3 +7,21 @@ You need [Node.js](https://nodejs.org) installed on your machine. Simply downloa
 Once Node.js is installed, open your command prompt or terminal and **navigate into this project folder**. There, run `npm install` to install all required dependencies.
 
 Finally, run `npm start` to start the development server and visit [localhost:8080](http://localhost:8080) to see the running application.
+
+
+Docs: 
+
+- Manifest file helps install the app on the home pafe of the device via web browser so that the app can be open by a icon just like we open native mobile apps via icon.
+- Service workers
+  - Scripts that runs in tha background n different thread and can react to certail events like fetch
+  - Can keep running event after the application or browser is closed
+  - Doesn't react to ajax ie traditional Xmlhttprequest and libraries like axios that worked on it.
+  - All the requests to server go through service worker and so the service worker can decide what to cache and thus helps in implementing offline browsing of certain areas of the application
+  - Receives push notifications from Server (Google, mozilla, android, ios each have their own web push servers) to which you can send notification from your server
+  - Can listen to notification interaction
+  - Push notifications are done in service worker because they work in background even when the app is closed.
+  - Helps in background Syncronization means if the request fails due to bad internet connection connection than the request can re-execute once the internet connection is established. Thus it can store such actions.
+  - Will only get active when there is no old service worker instance already running.
+  - Service worker is not attached to a single page but to an overall domain or scope.
+  - Scope means you can control which parts of the application are controlled by the service worker.
+  - If the service worker file is unchanged it will not install it but if there is a change then service worker will be upgraded to the new version
