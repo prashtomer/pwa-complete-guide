@@ -113,7 +113,9 @@ self.addEventListener('fetch', function (event) {
                 return caches.open(CACHE_STATIC_NAME)
                   .then(function (cache) {
                     // fallback page for when cache doesn't exist for a requested page when visiting without internet.
-                    return cache.match('/offline.html');
+                    if(event.request.url.indexOf('/help')) {
+                      return cache.match('/offline.html');
+                    }
                   });
               })
           }
