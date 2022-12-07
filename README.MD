@@ -53,3 +53,8 @@ Docs:
 - Periodic sync
   - Currently not supported in any browsers but will come later.
   - Get data from server in regular intervals in background, will help in websites like twitter
+
+- Push Notifications
+  - Notifications can simply be triggered via Notifications Api in the browser but how they are shown is in the control of the device.
+  - But for push notifications we need service worker.
+  - Notification is a system feature and not something browser specific so any actions you want to listen on notification can be listened in service worker and not the browser.
