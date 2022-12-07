@@ -3,7 +3,11 @@ importScripts('workbox-sw.prod.v2.1.3.js');
 const workboxSW = new self.WorkboxSW();
 
 workboxSW.router.registerRoute(/.*(?:googleapis|gstatic)\.com.*$/, workboxSW.strategies.staleWhileRevalidate({
-  cacheName: 'google-fonts'
+  cacheName: 'google-fonts',
+  cacheExpiration: {
+    maxEntries: 3,
+    maxAgeSeconds: 60 * 60 * 34 * 30
+  }
 }));
 
 workboxSW.router.registerRoute('https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css', workboxSW.strategies.staleWhileRevalidate({
@@ -33,7 +37,7 @@ workboxSW.precache([
   },
   {
     "url": "service-worker.js",
-    "revision": "97e58348d49003178b89e765186a1d61"
+    "revision": "5cd22a93ac5f672ccc074c5d8c505fa8"
   },
   {
     "url": "src/css/app.css",
@@ -77,7 +81,7 @@ workboxSW.precache([
   },
   {
     "url": "sw-base.js",
-    "revision": "f55a203333529bb913192e9a1f53d2bd"
+    "revision": "51f5cc6fe25355919dd690af857f94d7"
   },
   {
     "url": "sw.js",
