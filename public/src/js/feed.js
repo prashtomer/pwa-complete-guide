@@ -11,6 +11,39 @@ var captureButton = document.querySelector('#capture-btn');
 var imagePicker = document.querySelector('#image-picker');
 var imagePickerArea = document.querySelector('#pick-image');
 var picture;
+var locationBtn = document.querySelector('#location-btn');
+var locationLoader = document.querySelector('#location-loader');
+var fetchedLocation;
+
+locationBtn.addEventListener('click', function (event) {
+  if(!('geolocation' in navigator)) {
+    return;
+  }
+  locationBtn.style.display = 'none';
+  locationLoader.style.display = 'block';
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    locationBtn.style.display = 'inline';
+    locationLoader.style.display = 'none';
+    fetchedLocation = {lat: position.coords.latitude, lng: 0}; // 0 should be replaced with actual value as tutor don't want to share his location
+    locationInput.value = 'In Munich'; // use geocoding api to get the address through coordinates
+    document.querySelector('#manual-location').classList.add('is-focused');
+  }, function (err) {
+    console.log(err);
+    locationBtn.style.display = 'inline';
+    locationLoader.style.display = 'none';
+    alert('Couldn\'t fetch location, please enter manually!');
+    fetchedLocation = {lat: null, lng: null};
+  }, {
+    timeout: 7000
+  });
+});
+
+function initializeLocation() {
+  if(!('geolocation' in navigator)) {
+    locationBtn.style.display = 'none';
+  }
+}
 
 function initializeMedia() {
   if (!('mediaDevices' in navigator)) {
@@ -66,6 +99,7 @@ function openCreatePostModal() {
   // setTimeout(function() {
   createPostArea.style.transform = 'translateY(0)';
   initializeMedia();
+  initializeLocation();
   // }, 1);
   if (deferredPrompt) {
     deferredPrompt.prompt();
@@ -98,6 +132,8 @@ function closeCreatePostModal() {
   imagePickerArea.style.display = 'none';
   videoPlayer.style.display = 'none';
   canvasElement.style.display = 'none';
+  locationBtn.style.display = 'inline';
+  locationLoader.style.display = 'none';
   // createPostArea.style.display = 'none';
 }
 
@@ -189,6 +225,8 @@ function sendData() {
   postData.append('id', id);
   postData.append('title', titleInput.value);
   postData.append('location', locationInput.value);
+  postData.append('rawLocationLat', fetchedLocation.lat);
+  postData.append('rawLocationLng', fetchedLocation.lng);
   postData.append('file', picture, id + '.png');
 
   fetch('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', {
@@ -218,6 +256,7 @@ form.addEventListener('submit', function (event) {
           title: titleInput.value,
           location: locationInput.value,
           picture: picture,
+          rawLocation: fetchedLocation
         };
         writeData('sync-posts', post) // store the post request data in indexed db store
           .then(function () {

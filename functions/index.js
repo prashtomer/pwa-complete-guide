@@ -71,9 +71,12 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
               .database()
               .ref("posts")
               .push({
-                id: fields.id,
                 title: fields.title,
                 location: fields.location,
+                rawLocation: {
+                  lat: fields.rawLocationLat,
+                  lng: fields.rawLocationLng
+                },
                 image:
                   "https://firebasestorage.googleapis.com/v0/b/" +
                   bucket.name +
@@ -85,8 +88,8 @@ exports.storePostData = functions.https.onRequest(function(request, response) {
               .then(function() {
                 webpush.setVapidDetails(
                   "mailto:business@academind.com",
-                  'vapid-public-key',
-                  'vapid-private-key'
+                  "vapid-public-key",
+                  "vapid-primary-key"
                 );
                 return admin
                   .database()
