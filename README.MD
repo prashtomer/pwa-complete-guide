@@ -65,3 +65,15 @@ Docs:
   - Create react app generated project is already configured as a pwa app and you can run the initial page in offline mode
   - You can eject react app to configure the hidden webpack and service worker configurations manually it's one way only.
   - Same code from this project can be used in react components and make it a complete pwa
+  - look for documentation online
+
+- Angular
+  - Like react it's cli doesn't provide basic pwa setup by default
+  - you have to manually setup the pwa by creating manifest json and service worker file
+  - Same code from this project can be used in angular components and make it a complete pwa
+  - you can use some angular service worker package to create all pwa files
+  - look for documentation online
+
+  - Vue
+    - Use vue-pwa-boilerplate
+    - look for documentation online
