@@ -58,3 +58,5 @@ Docs:
   - Notifications can simply be triggered via Notifications Api in the browser but how they are shown is in the control of the device.
   - But for push notifications we need service worker.
   - Notification is a system feature and not something browser specific so any actions you want to listen on notification can be listened in service worker and not the browser.
+  - Each subscription stored on the server has it's own end point and corresponds to only one device and one browser which means through that endpoint messages can only be pushed to that device.
+  - Unrgistering a service worker will make the old subscriptions useless so make sure to delete them.
