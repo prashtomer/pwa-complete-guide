@@ -1,5 +1,6 @@
 // Registering in app.js because it's been added to all the html pages
 var deferredPrompt;
+var enableNotificationsButtons = document.querySelectorAll('.enable-notifications');
 
 // check if Promise is supported or not
 // if not assign it from the polyfill added in html files
@@ -16,7 +17,6 @@ if ('serviceWorker' in navigator) {
     .catch(function (err) {
       console.log(err);
     });
-  ;
 }
 
 window.addEventListener('beforeinstallprompt', function (event) {
@@ -25,3 +25,28 @@ window.addEventListener('beforeinstallprompt', function (event) {
   deferredPrompt = event;
   return false;
 });
+
+function displayConfirmNotification() {
+  var options = {
+    body: 'You successfully subscribed to our Notification service!',
+  };
+  new Notification('Successfully subscribed!', options);
+}
+
+function askForNotificationPermission() {
+  Notification.requestPermission(function (result) {
+    console.log('User choice', result);
+    if(result !== 'granted') {
+      console.log('No notification permission granted!');
+    } else {
+      displayConfirmNotification();
+    }
+  });
+}
+
+if('Notification' in window) {
+  for(var i = 0; i < enableNotificationsButtons.length; i++) {
+    enableNotificationsButtons[i].style.display = 'inline-block';
+    enableNotificationsButtons[i].addEventListener('click', askForNotificationPermission);
+  }
+}
