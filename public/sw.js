@@ -262,10 +262,10 @@ self.addEventListener('notificationclick', function (event) {
           });
 
           if(client !== undefined) {
-            client.navigate('http://localhost:8080');
+            client.navigate(notification.data.url);
             client.focus();
           } else {
-            clients.openWindow('http://localhost:8080');
+            clients.openWindow(notification.data.url);
           }
         })
     );
@@ -282,7 +282,8 @@ self.addEventListener('push', function (event) {
   console.log('Push Notification received', event);
   var data = {
     title: 'New!',
-    content: 'Something new happened!'
+    content: 'Something new happened!',
+    openUrl: '/'
   };
   if(event.data) {
     data = JSON.parse(event.data.text());
@@ -292,6 +293,9 @@ self.addEventListener('push', function (event) {
     body: data.content,
     icon: '/src/images/icons/app-icon-96x96.png',
     badge: '/src/images/icons/app-icon-96x96.png',
+    data: {
+      url: data.openUrl
+    }
   }
 
   event.waitUntil(
