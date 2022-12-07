@@ -111,7 +111,7 @@ function isInArray(string, array) {
 
 // Cache then Network Strategy for url and else go back to old strategy ie cache with network fallback
 self.addEventListener('fetch', function (event) { // cache then network
-  var url = 'https://tomer-pwagram-default-rtdb.firebaseio.com/posts';
+  var url = 'https://tomer-pwagram-default-rtdb.firebaseio.com/posts'; // this path can be changed to the path mentioned inside the index js inside the functions folder (requires credit card hence not implemented)
   if (event.request.url.indexOf(url) > -1) {
     event.respondWith(
       fetch(event.request)
@@ -215,22 +215,20 @@ self.addEventListener('sync', function (event) {
       readAllData('sync-posts')
         .then(function (data) {
           for (var dt of data) {
+            var postData = new FormData();
+            postData.append('id', dt.id);
+            postData.append('title', dt.title);
+            postData.append('location', dt.location);
+            postData.append('file', dt.picture, dt.id + '.png');
+
+
             fetch('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-              },
-              body: JSON.stringify({
-                id: dt.id,
-                title: dt.title,
-                location: dt.location,
-                image: 'https://firebasestorage.googleapis.com/v0/b/tomer-pwagram.appspot.com/o/sf-boat.jpg?alt=media&token=4368f527-6df6-480f-b6fa-fc746f512af7'
-              })
+              body: postData
             })
               .then(function (res) {
                 console.log('Sent data', res);
-                if(res.ok) {
+                if (res.ok) {
                   deleteItemFromData('sync-posts', dt.id);
                 }
               })
@@ -249,7 +247,7 @@ self.addEventListener('notificationclick', function (event) {
 
   console.log(notification);
 
-  if(action === 'confirm') {
+  if (action === 'confirm') {
     console.log('Confirm was chosen');
     notification.close();
   } else {
@@ -261,7 +259,7 @@ self.addEventListener('notificationclick', function (event) {
             return c.visibilityState === 'visible';
           });
 
-          if(client !== undefined) {
+          if (client !== undefined) {
             client.navigate(notification.data.url);
             client.focus();
           } else {
@@ -285,7 +283,7 @@ self.addEventListener('push', function (event) {
     content: 'Something new happened!',
     openUrl: '/'
   };
-  if(event.data) {
+  if (event.data) {
     data = JSON.parse(event.data.text());
   }
 

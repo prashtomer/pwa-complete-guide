@@ -10,18 +10,19 @@ var canvasElement = document.querySelector('#canvas');
 var captureButton = document.querySelector('#capture-btn');
 var imagePicker = document.querySelector('#image-picker');
 var imagePickerArea = document.querySelector('#pick-image');
+var picture;
 
 function initializeMedia() {
-  if(!('mediaDevices' in navigator)) {
+  if (!('mediaDevices' in navigator)) {
     navigator.mediaDevices = {};
   }
 
-  if(!('getUserMedia' in navigator.mediaDevices)) {
+  if (!('getUserMedia' in navigator.mediaDevices)) {
     // adding old browser video support
     navigator.mediaDevices.getUserMedia = function (constraints) {
       var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-      if(!getUserMedia) {
+      if (!getUserMedia) {
         return Promise.reject(new Error('getUserMedia is not implemented!'));
       }
 
@@ -52,7 +53,8 @@ captureButton.addEventListener('click', function (event) {
   context.drawImage(videoPlayer, 0, 0, canvas.width, videoPlayer.videoHeight / (videoPlayer.videoWidth / canvas.width));
   videoPlayer.srcObject.getVideoTracks().forEach(function (track) {
     track.stop();
-  })
+  });
+  picture = dataURItoBlob(canvasElement.toDataURL()); // convert base64 to blob
 });
 
 function openCreatePostModal() {
@@ -64,7 +66,7 @@ function openCreatePostModal() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
 
-    deferredPrompt.userChoice.then(function(choiceResult) {
+    deferredPrompt.userChoice.then(function (choiceResult) {
       console.log(choiceResult.outcome);
 
       if (choiceResult.outcome === 'dismissed') {
@@ -146,7 +148,7 @@ function createCard(data) {
 
 function updateUI(data) {
   clearCards();
-  for(var i = 0; i < data.length; i++) {
+  for (var i = 0; i < data.length; i++) {
     createCard(data[i]);
   }
 }
@@ -162,16 +164,16 @@ fetch(url)
     networkDatareceived = true;
     console.log('From web', data);
     var dataArray = [];
-    for(var key in data) {
+    for (var key in data) {
       dataArray.push(data[key]);
     }
     updateUI(dataArray);
   });
 
-if('indexedDB' in window) {
+if ('indexedDB' in window) {
   readAllData('posts')
     .then(function (data) {
-      if(!networkDatareceived) {
+      if (!networkDatareceived) {
         console.log('From cache', data);
         updateUI(data);
       }
@@ -179,18 +181,15 @@ if('indexedDB' in window) {
 }
 
 function sendData() {
+  var id = new Date().toISOString();
+  postData.append('id', id);
+  postData.append('title', titleInput.value);
+  postData.append('location', locationInput.value);
+  postData.append('file', picture, id + '.png');
+
   fetch('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({
-      id: new Date().toISOString(),
-      title: titleInput.value,
-      location: locationInput.value,
-      image: 'https://firebasestorage.googleapis.com/v0/b/tomer-pwagram.appspot.com/o/sf-boat.jpg?alt=media&token=4368f527-6df6-480f-b6fa-fc746f512af7'
-    })
+    body: postData
   })
     .then(function (res) {
       console.log('Sent data', res);
@@ -200,20 +199,21 @@ function sendData() {
 
 form.addEventListener('submit', function (event) {
   event.preventDefault();
-  if(titleInput.value.trim() === '' || locationInput.value.trim() === '') {
+  if (titleInput.value.trim() === '' || locationInput.value.trim() === '') {
     alert('Please enter valid data!')
     return;
   }
 
   closeCreatePostModal();
 
-  if('serviceWorker' in navigator && 'SyncManager' in window) {
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {
     navigator.serviceWorker.ready
       .then(function (sw) {
         var post = {
           id: new Date().toISOString(),
           title: titleInput.value,
           location: locationInput.value,
+          picture: picture,
         };
         writeData('sync-posts', post) // store the post request data in indexed db store
           .then(function () {
