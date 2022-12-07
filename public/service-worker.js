@@ -1,4 +1,6 @@
 importScripts('workbox-sw.prod.v2.1.3.js');
+importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
 
 const workboxSW = new self.WorkboxSW();
 
@@ -17,6 +19,23 @@ workboxSW.router.registerRoute('https://cdnjs.cloudflare.com/ajax/libs/material-
 workboxSW.router.registerRoute(/.*(?:firebasestorage\.googleapis)\.com.*$/, workboxSW.strategies.staleWhileRevalidate({
   cacheName: 'post-images'
 }));
+
+workboxSW.router.registerRoute('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', function (args) {
+  return fetch(args.event.request)
+    .then(function (res) {
+      var clonedRes = res.clone();
+      clearAllData('posts')
+        .then(function () {
+          return clonedRes.json();
+        })
+        .then(function (data) {
+          for (var key in data) {
+            writeData('posts', data[key]);
+          }
+        });
+      return res;
+    })
+});
 
 workboxSW.precache([
   {
@@ -37,7 +56,7 @@ workboxSW.precache([
   },
   {
     "url": "service-worker.js",
-    "revision": "5cd22a93ac5f672ccc074c5d8c505fa8"
+    "revision": "b4f79d82d6a17c2ac619bab93403fc1e"
   },
   {
     "url": "src/css/app.css",
@@ -81,7 +100,7 @@ workboxSW.precache([
   },
   {
     "url": "sw-base.js",
-    "revision": "51f5cc6fe25355919dd690af857f94d7"
+    "revision": "c230ddcc69aa61fb7cb73a5d0dacf54f"
   },
   {
     "url": "sw.js",
