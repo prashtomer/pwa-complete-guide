@@ -10,7 +10,7 @@ if (!window.Promise) {
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('/sw.js') // scope here can be passed as the second paramter and that will override the scope created by placing the service worker file in the public folder.
+    .register('/service-worker.js') // scope here can be passed as the second paramter and that will override the scope created by placing the service worker file in the public folder.
     .then(function () {
       console.log('Service worker registered!');
     })
