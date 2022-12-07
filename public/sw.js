@@ -206,3 +206,39 @@ self.addEventListener('fetch', function (event) { // cache then network
 // self.addEventListener('fetch', function (event) {
 //   event.respondWith(fetch(event.request));
 // })
+
+self.addEventListener('sync', function (event) {
+  console.log('[Service Worker] Background syncing', event);
+  if (event.tag === 'sync-new-posts') {
+    console.log('[Service Worker] Syncing new Posts');
+    event.waitUntil(
+      readAllData('sync-posts')
+        .then(function (data) {
+          for (var dt of data) {
+            fetch('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+              body: JSON.stringify({
+                id: dt.id,
+                title: dt.title,
+                location: dt.location,
+                image: 'https://firebasestorage.googleapis.com/v0/b/tomer-pwagram.appspot.com/o/sf-boat.jpg?alt=media&token=4368f527-6df6-480f-b6fa-fc746f512af7'
+              })
+            })
+              .then(function (res) {
+                console.log('Sent data', res);
+                if(res.ok) {
+                  deleteItemFromData('sync-posts', dt.id);
+                }
+              })
+              .catch(function () {
+                console.log('Error while sending data', err);
+              });
+          }
+        })
+    );
+  }
+});

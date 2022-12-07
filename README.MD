@@ -14,7 +14,7 @@ Docs:
 - Manifest file helps install the app on the home pafe of the device via web browser so that the app can be open by a icon just like we open native mobile apps via icon.
 
 - Service workers
-  - Scripts that runs in tha background n different thread and can react to certail events like fetch
+  - Scripts that runs in tha background on different thread and can react to certail events like fetch
   - Can keep running event after the application or browser is closed
   - Doesn't react to ajax ie traditional Xmlhttprequest and libraries like axios that worked on it.
   - All the requests to server go through service worker and so the service worker can decide what to cache and thus helps in implementing offline browsing of certain areas of the application
@@ -43,3 +43,13 @@ Docs:
   - can be accessed asynchronously with both from javascript and service workers
   - Since in local storage and session storage data can be accessed synchronously they can not be used in service workers
   - data can be unstructured and doesn't have to have schema.
+
+- Background Synchronization
+  - Synchronizing the data even when the user is offline while sending it.
+  - Using service worker you can't cache the post request. You can cache the response but you can't cache the request itself to be send at later point of time
+  - It will work even after the application or the browser itself is closed. 
+  - To see background synchronization in action you need to turn off the wifi, simply going offline from dev tools will not work.
+
+- Periodic sync
+  - Currently not supported in any browsers but will come later.
+  - Get data from server in regular intervals in background, will help in websites like twitter
