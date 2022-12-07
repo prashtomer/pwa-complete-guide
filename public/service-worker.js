@@ -73,7 +73,7 @@ workboxSW.precache([
   },
   {
     "url": "index.html",
-    "revision": "b5418736e69e38e9ebac910cf2f33a4c"
+    "revision": "c4158db9aa7c9b55dcf761151551350a"
   },
   {
     "url": "manifest.json",
@@ -82,10 +82,6 @@ workboxSW.precache([
   {
     "url": "offline.html",
     "revision": "52da5a6f79941bee244dad27107a38af"
-  },
-  {
-    "url": "service-worker.js",
-    "revision": "d29d0ff8aeda4a26242d3ad7da41d1f6"
   },
   {
     "url": "src/css/app.css",
@@ -98,46 +94,6 @@ workboxSW.precache([
   {
     "url": "src/css/help.css",
     "revision": "1c6d81b27c9d423bece9869b07a7bd73"
-  },
-  {
-    "url": "src/js/app.js",
-    "revision": "29ad6b2ffe8492b56350861f9087b8f3"
-  },
-  {
-    "url": "src/js/feed.js",
-    "revision": "05320303e36ecb599a9b8944e61ea741"
-  },
-  {
-    "url": "src/js/fetch.js",
-    "revision": "6b82fbb55ae19be4935964ae8c338e92"
-  },
-  {
-    "url": "src/js/idb.js",
-    "revision": "017ced36d82bea1e08b08393361e354d"
-  },
-  {
-    "url": "src/js/material.min.js",
-    "revision": "713af0c6ce93dbbce2f00bf0a98d0541"
-  },
-  {
-    "url": "src/js/promise.js",
-    "revision": "10c2238dcd105eb23f703ee53067417f"
-  },
-  {
-    "url": "src/js/utility.js",
-    "revision": "1a1c102f4ec0a8379ab902d936363b2a"
-  },
-  {
-    "url": "sw-base.js",
-    "revision": "a409f5074ade239f795255fcabae77ef"
-  },
-  {
-    "url": "sw.js",
-    "revision": "07101aff566eb9e93f64e296dd841212"
-  },
-  {
-    "url": "workbox-sw.prod.v2.1.3.js",
-    "revision": "a9890beda9e5f17e4c68f42324217941"
   },
   {
     "url": "src/images/main-image-lg.jpg",
@@ -154,6 +110,34 @@ workboxSW.precache([
   {
     "url": "src/images/sf-boat.jpg",
     "revision": "0f282d64b0fb306daf12050e812d6a19"
+  },
+  {
+    "url": "src/js/app.min.js",
+    "revision": "9aa711b923bd29b22de851c017b1aa25"
+  },
+  {
+    "url": "src/js/feed.min.js",
+    "revision": "82e097e6f385c4a03083d283ddc30e1e"
+  },
+  {
+    "url": "src/js/fetch.min.js",
+    "revision": "80ccc680cbfed27824c9034064581f60"
+  },
+  {
+    "url": "src/js/idb.min.js",
+    "revision": "1591dd473d28207180abd491a2cfce90"
+  },
+  {
+    "url": "src/js/material.min.js",
+    "revision": "713af0c6ce93dbbce2f00bf0a98d0541"
+  },
+  {
+    "url": "src/js/promise.min.js",
+    "revision": "df88ae76718e421901c2293b59e979b7"
+  },
+  {
+    "url": "src/js/utility.min.js",
+    "revision": "109b2f15f904fdc6f47081e064afb458"
   }
 ]);
 
