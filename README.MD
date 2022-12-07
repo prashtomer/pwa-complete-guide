@@ -60,3 +60,8 @@ Docs:
   - Notification is a system feature and not something browser specific so any actions you want to listen on notification can be listened in service worker and not the browser.
   - Each subscription stored on the server has it's own end point and corresponds to only one device and one browser which means through that endpoint messages can only be pushed to that device.
   - Unrgistering a service worker will make the old subscriptions useless so make sure to delete them.
+
+- React
+  - Create react app generated project is already configured as a pwa app and you can run the initial page in offline mode
+  - You can eject react app to configure the hidden webpack and service worker configurations manually it's one way only.
+  - Same code from this project can be used in react components and make it a complete pwa
