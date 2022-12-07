@@ -21,6 +21,7 @@ workboxSW.router.registerRoute(/.*(?:firebasestorage\.googleapis)\.com.*$/, work
 }));
 
 workboxSW.router.registerRoute('https://tomer-pwagram-default-rtdb.firebaseio.com/posts.json', function (args) {
+  // copied from custom implementation inide the sw.js
   return fetch(args.event.request)
     .then(function (res) {
       var clonedRes = res.clone();
@@ -34,6 +35,34 @@ workboxSW.router.registerRoute('https://tomer-pwagram-default-rtdb.firebaseio.co
           }
         });
       return res;
+    })
+});
+
+// fallback implementation if the page is not found
+workboxSW.router.registerRoute(function (routeData) {
+  return (routeData.event.request.headers.get('accept').includes('text/html'));
+}, function (args) {
+  // copied from custom implementation inide the sw.js
+  return caches.match(args.event.request)
+    .then(function (response) {
+      if (response) {
+        return response;
+      } else {
+        return fetch(args.event.request)
+          .then(function (res) {
+            return caches.open('dynamic') // caching dynamic data
+              .then(function (cache) {
+                cache.put(args.event.request.url, res.clone());
+                return res;
+              })
+          })
+          .catch(function (err) {
+            return caches.match('/offline.html')
+              .then(function (res) {
+                return res;
+              })
+          })
+      }
     })
 });
 
@@ -56,7 +85,7 @@ workboxSW.precache([
   },
   {
     "url": "service-worker.js",
-    "revision": "b4f79d82d6a17c2ac619bab93403fc1e"
+    "revision": "5d6670df37fffcf64a867b4bccaa0e53"
   },
   {
     "url": "src/css/app.css",
@@ -100,7 +129,7 @@ workboxSW.precache([
   },
   {
     "url": "sw-base.js",
-    "revision": "c230ddcc69aa61fb7cb73a5d0dacf54f"
+    "revision": "d9e127ebdbc17cfb945595635b5ecb34"
   },
   {
     "url": "sw.js",
